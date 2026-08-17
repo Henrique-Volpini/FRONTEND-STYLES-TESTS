@@ -458,4 +458,9 @@ button {
         animation-duration: 280ms !important;
         transition-duration: 280ms !important;
     }
+
+    .button-loader {
+    animation-duration: 700ms !important;
+    animation-iteration-count: infinite !important;
+}
 }
