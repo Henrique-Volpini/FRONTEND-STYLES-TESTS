@@ -23,9 +23,11 @@ from front_styles import views
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('', views.login_view, name='login'),
+    path('login/', views.login_view, name='login'),
 
     path('home/', views.home_view, name='home'),
 
-    path('<path:unmatched_path>', lambda request, unmatched_path: redirect('login'), name='login-fallback'),
+    path('menu/', views.menu_view, name='menu'),
+
+    path('<path:unmatched_path>', lambda request, unmatched_path: redirect('menu'), name='login-fallback'),
 ]

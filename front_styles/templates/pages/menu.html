@@ -1,0 +1,78 @@
+{% load static i18n %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#17100c">
+    <title>Cardápio | Meu Front</title>
+    <link rel="stylesheet" href="{% static 'css/pages/menu.css' %}">
+</head>
+<body>
+    <main class="menu-page">
+        <section class="menu-panel" aria-labelledby="menu-title">
+            <header class="menu-header">
+                <div>
+                    <span class="menu-eyebrow">Cafeteria</span>
+                    <h1 id="menu-title">Nosso cardápio</h1>
+                    <p>Cafés preparados com calma e sabores para acompanhar.</p>
+                </div>
+
+                <nav class="category-nav" aria-label="Categorias do cardápio">
+                    {% for categoria in categorias %}
+                        <button
+                            class="category-button{% if forloop.first %} is-active{% endif %}"
+                            type="button"
+                            data-target="categoria-{{ categoria.id }}"
+                        >
+                            {{ categoria.titulo }}
+                        </button>
+                    {% endfor %}
+                </nav>
+            </header>
+
+            <div class="menu-scroll" id="menu-scroll" tabindex="0">
+                {% for categoria in categorias %}
+                    <section
+                        class="menu-category"
+                        id="categoria-{{ categoria.id }}"
+                        aria-labelledby="categoria-{{ categoria.id }}-titulo"
+                    >
+                        <header class="category-header">
+                            <div>
+                                <span>{{ forloop.counter|stringformat:"02d" }}</span>
+                                <h2 id="categoria-{{ categoria.id }}-titulo">{{ categoria.titulo }}</h2>
+                            </div>
+                            <p>{{ categoria.texto }}</p>
+                        </header>
+
+                        <div class="menu-grid">
+                            {% for comida in categoria.comidas.all %}
+                                <article class="menu-item">
+                                    <div class="item-content">
+                                        <h3>{{ comida.nome }}</h3>
+                                        <strong>{% language 'pt-br' %}R$ {{ comida.preco|floatformat:2 }}{% endlanguage %}</strong>
+                                        <p>{{ comida.descricao }}</p>
+                                    </div>
+                                    <img
+                                        class="item-image"
+                                        src="{{ comida.imagem }}"
+                                        alt="{{ comida.nome }}"
+                                        loading="lazy"
+                                    >
+                                </article>
+                            {% empty %}
+                                <p class="empty-category">Nenhum item cadastrado nesta categoria.</p>
+                            {% endfor %}
+                        </div>
+                    </section>
+                {% empty %}
+                    <p class="empty-menu">Nenhuma categoria cadastrada.</p>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <script src="{% static 'js/pages/menu.js' %}" defer></script>
+</body>
+</html>

@@ -2,6 +2,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
+from .models import Categoria
+
 
 REMEMBER_ME_SECONDS = 30 * 24 * 60 * 60
 
@@ -35,3 +37,8 @@ def login_view(request):
 @login_required(login_url='login')
 def home_view(request):
     return render(request, 'pages/home.html')
+
+@login_required(login_url='login')
+def menu_view(request):
+    categorias = Categoria.objects.prefetch_related('comidas')
+    return render(request, 'pages/menu.html', {'categorias': categorias})
