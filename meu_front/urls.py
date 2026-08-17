@@ -25,5 +25,7 @@ urlpatterns = [
 
     path('', views.login_view, name='login'),
 
+    path('home/', views.home_view, name='home'),
+
     path('<path:unmatched_path>', lambda request, unmatched_path: redirect('login'), name='login-fallback'),
 ]
