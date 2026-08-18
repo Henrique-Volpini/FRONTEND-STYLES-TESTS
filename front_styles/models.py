@@ -4,9 +4,10 @@ from django.db import models
 class Categoria(models.Model):
     titulo = models.CharField(max_length=100, unique=True)
     texto = models.CharField(max_length=200)
+    ordem = models.PositiveIntegerField(default=0, db_index=True)
 
     class Meta:
-        ordering = ('id',)
+        ordering = ('ordem', 'id')
 
     def __str__(self):
         return self.titulo

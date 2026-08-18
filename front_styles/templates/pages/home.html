@@ -1,0 +1,337 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#2b2119">
+    <title>Gestão da cafeteria | Meu Front</title>
+    <link rel="stylesheet" href="{% static 'css/pages/home.css' %}">
+</head>
+<body>
+    <main class="home-page">
+        <div class="ambient-light ambient-light--top" aria-hidden="true"></div>
+        <div class="ambient-light ambient-light--bottom" aria-hidden="true"></div>
+
+        <section class="workspace" aria-label="Painel de gestão da cafeteria">
+            <header class="workspace-navbar">
+                <a class="brand" href="{% url 'home' %}" aria-label="Início do painel">
+                    <span class="brand-mark" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M5 8h11v6.2A4.8 4.8 0 0 1 11.2 19H9.8A4.8 4.8 0 0 1 5 14.2V8Z" />
+                            <path d="M16 10h1.7a2.3 2.3 0 0 1 0 4.6H16M8 5.4c0-1 1-1.2 1-2.4M12 5.4c0-1 1-1.2 1-2.4" />
+                        </svg>
+                    </span>
+                    <span>
+                        <strong>Café da Casa</strong>
+                        <small>Gestão do cardápio</small>
+                    </span>
+                </a>
+
+                <nav class="section-nav" aria-label="Seções de cadastro" role="tablist">
+                    <button
+                        class="nav-tab is-active"
+                        id="tab-cafes"
+                        type="button"
+                        role="tab"
+                        aria-selected="true"
+                        aria-controls="panel-cafes"
+                        data-tab="cafes"
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M5 8h11v6.2A4.8 4.8 0 0 1 11.2 19H9.8A4.8 4.8 0 0 1 5 14.2V8Z" />
+                            <path d="M16 10h1.7a2.3 2.3 0 0 1 0 4.6H16" />
+                        </svg>
+                        <span>Cafés</span>
+                    </button>
+                    <button
+                        class="nav-tab"
+                        id="tab-categorias"
+                        type="button"
+                        role="tab"
+                        aria-selected="false"
+                        aria-controls="panel-categorias"
+                        tabindex="-1"
+                        data-tab="categorias"
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M4 7.5A1.5 1.5 0 0 1 5.5 6h5A1.5 1.5 0 0 1 12 7.5v9a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 16.5v-9ZM15 8h5M15 12h5M15 16h5" />
+                        </svg>
+                        <span>Categorias</span>
+                    </button>
+                </nav>
+
+                <div class="navbar-actions">
+                    <span class="admin-status">
+                        <i aria-hidden="true"></i>
+                        <span>Painel administrativo</span>
+                    </span>
+                    <a class="menu-link" href="{% url 'menu' %}">
+                        <span>Ver cardápio</span>
+                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M5 12h14M14 7l5 5-5 5" />
+                        </svg>
+                    </a>
+                </div>
+            </header>
+
+            <div class="workspace-content">
+                <section
+                    class="content-panel is-active"
+                    id="panel-cafes"
+                    role="tabpanel"
+                    aria-labelledby="tab-cafes"
+                    data-panel="cafes"
+                >
+                    <header class="panel-heading">
+                        <div>
+                            <span class="eyebrow">Cardápio • Cafés</span>
+                            <h1 id="coffee-heading">Cadastre um novo café</h1>
+                            <p>Preencha as informações que aparecerão no cardápio da cafeteria.</p>
+                        </div>
+                        <span class="step-badge">Novo item</span>
+                    </header>
+
+                    <div class="coffee-layout">
+                        <form class="glass-form" id="coffee-form">
+                            {% csrf_token %}
+                            <div class="form-grid">
+                                <label class="form-field form-field--wide" for="coffee-name">
+                                    <span>Nome do café</span>
+                                    <span class="field-control">
+                                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                            <path d="M5 8h11v6.2A4.8 4.8 0 0 1 11.2 19H9.8A4.8 4.8 0 0 1 5 14.2V8Z" />
+                                            <path d="M16 10h1.7a2.3 2.3 0 0 1 0 4.6H16" />
+                                        </svg>
+                                        <input id="coffee-name" name="nome" type="text" maxlength="100" placeholder="Ex.: Cappuccino artesanal" autocomplete="off" required>
+                                    </span>
+                                </label>
+
+                                <div class="form-field">
+                                    <span id="coffee-category-label">Categoria</span>
+                                    <div class="category-picker" id="coffee-category-picker">
+                                        <button
+                                            class="category-picker-trigger"
+                                            id="coffee-category"
+                                            type="button"
+                                            aria-haspopup="listbox"
+                                            aria-expanded="false"
+                                            aria-labelledby="coffee-category-label coffee-category-value"
+                                            aria-controls="coffee-category-menu"
+                                        >
+                                            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                <path d="M4 7.5A1.5 1.5 0 0 1 5.5 6h5A1.5 1.5 0 0 1 12 7.5v9a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 16.5v-9ZM15 8h5M15 12h5M15 16h5" />
+                                            </svg>
+                                            <span id="coffee-category-value">Selecione uma categoria</span>
+                                            <svg class="picker-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                                <path d="m7 10 5 5 5-5" />
+                                            </svg>
+                                        </button>
+                                        <div
+                                            class="category-picker-menu"
+                                            id="coffee-category-menu"
+                                            role="listbox"
+                                            aria-labelledby="coffee-category-label"
+                                            tabindex="-1"
+                                            hidden
+                                        ></div>
+                                        <input id="coffee-category-input" name="categoria" type="hidden">
+                                    </div>
+                                    <small class="field-help" id="category-help">Cadastre uma categoria para começar.</small>
+                                </div>
+
+                                <label class="form-field" for="coffee-price">
+                                    <span>Preço</span>
+                                    <span class="field-control field-control--price">
+                                        <b aria-hidden="true">R$</b>
+                                        <input id="coffee-price" name="preco" type="text" inputmode="decimal" placeholder="0,00" autocomplete="off" required>
+                                    </span>
+                                </label>
+
+                                <label class="form-field form-field--wide" for="coffee-description">
+                                    <span>Descrição</span>
+                                    <span class="field-control field-control--textarea">
+                                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                            <path d="M5 6h14M5 10h14M5 14h9M5 18h6" />
+                                        </svg>
+                                        <textarea id="coffee-description" name="descricao" maxlength="100" rows="4" placeholder="Conte um pouco sobre o sabor, os ingredientes e o preparo..." required></textarea>
+                                    </span>
+                                    <small class="character-count"><span id="description-count">0</span>/100</small>
+                                </label>
+
+                                <label class="form-field form-field--wide" for="coffee-image">
+                                    <span>Imagem do produto <em>opcional</em></span>
+                                    <span class="field-control">
+                                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                            <rect x="4" y="5" width="16" height="14" rx="2" />
+                                            <circle cx="9" cy="10" r="1.5" />
+                                            <path d="m6 17 4-4 3 3 2-2 3 3" />
+                                        </svg>
+                                        <input id="coffee-image" name="imagem" type="url" maxlength="500" placeholder="https://exemplo.com/imagem.jpg" autocomplete="url">
+                                    </span>
+                                </label>
+                            </div>
+
+                            <div class="form-actions">
+                                <button class="secondary-button" type="reset">Limpar</button>
+                                <button class="primary-button" id="coffee-submit" type="submit">
+                                    <span>Cadastrar café</span>
+                                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                        <path d="M12 5v14M5 12h14" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </form>
+
+                        <aside class="preview-column" aria-label="Prévia do novo café">
+                            <div class="preview-heading">
+                                <div>
+                                    <span>Como ficará no cardápio</span>
+                                    <small>Mesma estrutura do card publicado</small>
+                                </div>
+                                <span class="live-indicator"><i></i> Ao vivo</span>
+                            </div>
+
+                            <p class="preview-context">Categoria: <strong id="preview-category">Sem categoria</strong></p>
+                            <article class="coffee-preview">
+                                <div class="preview-copy">
+                                    <h2 id="preview-name">Seu café especial</h2>
+                                    <strong id="preview-price">R$ 0,00</strong>
+                                    <p id="preview-description">A descrição do produto aparecerá aqui.</p>
+                                </div>
+                                <div class="preview-image" id="preview-image">
+                                    <span class="preview-image-placeholder" aria-hidden="true">
+                                        <svg viewBox="0 0 48 48" fill="none">
+                                            <path d="M11 18h22v11a9 9 0 0 1-9 9h-4a9 9 0 0 1-9-9V18Z" />
+                                            <path d="M33 22h3.5a4.5 4.5 0 0 1 0 9H33M17 13c0-2 2-2.5 2-5M25 13c0-2 2-2.5 2-5" />
+                                        </svg>
+                                    </span>
+                                    <img id="preview-photo" alt="" hidden>
+                                </div>
+                            </article>
+
+                            <div class="recent-summary">
+                                <div class="summary-title">
+                                    <span>Últimos cadastros</span>
+                                    <strong id="coffee-total">0 itens</strong>
+                                </div>
+                                <ul class="recent-list" id="recent-coffees" aria-live="polite">
+                                    <li class="empty-item">Nenhum café cadastrado ainda.</li>
+                                </ul>
+                            </div>
+                        </aside>
+                    </div>
+                </section>
+
+                <section
+                    class="content-panel"
+                    id="panel-categorias"
+                    role="tabpanel"
+                    aria-labelledby="tab-categorias"
+                    data-panel="categorias"
+                    hidden
+                >
+                    <header class="panel-heading">
+                        <div>
+                            <span class="eyebrow">Cardápio • Categorias</span>
+                            <h1 id="category-heading">Organize seus produtos</h1>
+                            <p>Crie categorias para deixar o cardápio simples de explorar.</p>
+                        </div>
+                        <span class="step-badge">Organização</span>
+                    </header>
+
+                    <div class="category-layout">
+                        <form class="glass-form category-form" id="category-form">
+                            {% csrf_token %}
+                            <div class="form-intro-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M4 7.5A1.5 1.5 0 0 1 5.5 6h5A1.5 1.5 0 0 1 12 7.5v9a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 16.5v-9ZM15 8h5M15 12h5M15 16h5" />
+                                </svg>
+                            </div>
+                            <h2>Nova categoria</h2>
+                            <p>Use nomes curtos e uma descrição que ajude o cliente a encontrar o que deseja.</p>
+
+                            <label class="form-field" for="category-name">
+                                <span>Nome da categoria</span>
+                                <span class="field-control">
+                                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                        <path d="M4 7.5A1.5 1.5 0 0 1 5.5 6h5A1.5 1.5 0 0 1 12 7.5v9a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 16.5v-9ZM15 8h5M15 12h5M15 16h5" />
+                                    </svg>
+                                    <input id="category-name" name="titulo" type="text" maxlength="100" placeholder="Ex.: Cafés gelados" autocomplete="off" required>
+                                </span>
+                            </label>
+
+                            <label class="form-field" for="category-description">
+                                <span>Descrição</span>
+                                <span class="field-control field-control--textarea">
+                                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                        <path d="M5 6h14M5 10h14M5 14h9M5 18h6" />
+                                    </svg>
+                                    <textarea id="category-description" name="texto" maxlength="200" rows="5" placeholder="Ex.: Bebidas refrescantes para qualquer hora do dia." required></textarea>
+                                </span>
+                            </label>
+
+                            <button class="primary-button primary-button--full" type="submit">
+                                <span>Criar categoria</span>
+                                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                    <path d="M12 5v14M5 12h14" />
+                                </svg>
+                            </button>
+                        </form>
+
+                        <aside class="category-collection" aria-labelledby="category-list-title">
+                            <header>
+                                <div>
+                                    <span class="eyebrow">Sua organização</span>
+                                    <h2 id="category-list-title">Categorias cadastradas</h2>
+                                    <p class="collection-instruction">Abra uma categoria para ver seus itens. Use as setas para definir a ordem do cardápio.</p>
+                                </div>
+                                <span class="collection-count" id="category-total">0</span>
+                            </header>
+
+                            <ul class="category-list" id="category-list" aria-live="polite">
+                                <li class="category-empty">
+                                    <span>
+                                        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                                            <path d="M4 7.5A1.5 1.5 0 0 1 5.5 6h5A1.5 1.5 0 0 1 12 7.5v9a1.5 1.5 0 0 1-1.5 1.5h-5A1.5 1.5 0 0 1 4 16.5v-9ZM15 8h5M15 12h5M15 16h5" />
+                                        </svg>
+                                    </span>
+                                    <strong>Nenhuma categoria ainda</strong>
+                                    <p>Crie a primeira categoria usando o formulário ao lado.</p>
+                                </li>
+                            </ul>
+                        </aside>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <div class="confirm-layer" id="confirm-layer" hidden>
+            <section class="confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby="confirm-title" aria-describedby="confirm-message">
+                <span class="confirm-symbol" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M12 8v5M12 17h.01" />
+                        <path d="M10.3 4.2 3.6 17a2 2 0 0 0 1.8 3h13.2a2 2 0 0 0 1.8-3L13.7 4.2a1.9 1.9 0 0 0-3.4 0Z" />
+                    </svg>
+                </span>
+                <h2 id="confirm-title">Confirmar exclusão</h2>
+                <p id="confirm-message">Essa ação não pode ser desfeita.</p>
+                <div class="confirm-actions">
+                    <button class="secondary-button" id="confirm-cancel" type="button">Cancelar</button>
+                    <button class="danger-button" id="confirm-accept" type="button">Excluir</button>
+                </div>
+            </section>
+        </div>
+
+        <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
+            <span class="toast-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="m5 12 4 4L19 6" /></svg>
+            </span>
+            <span id="toast-message">Cadastro realizado com sucesso.</span>
+        </div>
+    </main>
+
+    {{ home_data|json_script:"home-data" }}
+    <script src="{% static 'js/pages/home.js' %}" defer></script>
+</body>
+</html>

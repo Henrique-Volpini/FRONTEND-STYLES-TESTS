@@ -29,5 +29,5 @@ urlpatterns = [
 
     path('menu/', views.menu_view, name='menu'),
 
-    re_path(r'^.*$', lambda request: redirect('menu'), name='menu-fallback'),
+    re_path(r'^.*$', lambda request: redirect('menu'), name='home-fallback'),
 ]
