@@ -10,7 +10,7 @@ REMEMBER_ME_SECONDS = 30 * 24 * 60 * 60
 
 def login_view(request):
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('menu')
 
     context = {}
 
@@ -23,7 +23,7 @@ def login_view(request):
         if user is not None:
             login(request, user)
             request.session.set_expiry(REMEMBER_ME_SECONDS if remember_me else 0)
-            return redirect('home')
+            return redirect('menu')
 
         context = {
             'error_message': 'Login ou senha inválidos.',
@@ -36,9 +36,9 @@ def login_view(request):
 
 @login_required(login_url='login')
 def home_view(request):
-    return render(request, 'pages/home.html')
+    return redirect('home')
 
-@login_required(login_url='login')
+
 def menu_view(request):
     categorias = Categoria.objects.prefetch_related('comidas')
     return render(request, 'pages/menu.html', {'categorias': categorias})

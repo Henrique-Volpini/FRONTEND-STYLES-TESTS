@@ -15,7 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
 from django.shortcuts import redirect
 from front_styles import views
 
@@ -29,5 +29,5 @@ urlpatterns = [
 
     path('menu/', views.menu_view, name='menu'),
 
-    path('<path:unmatched_path>', lambda request, unmatched_path: redirect('menu'), name='login-fallback'),
+    re_path(r'^.*$', lambda request: redirect('menu'), name='menu-fallback'),
 ]
